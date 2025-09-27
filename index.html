@@ -7,361 +7,324 @@
   <!-- React + ReactDOM + React Router (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-router-dom@6.23.1/umd/react-router-dom.development.js"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- FontAwesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <script crossorigin src="https://unpkg.com/@remix-run/router@1.16.0/dist/router.umd.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-router@6.23.1/dist/umd/react-router.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-router-dom@6.23.1/dist/umd/react-router-dom.development.js"></script>
   <style>
-    :root {
-      --bg: #f5f5f5;
-      --text: #000;
-      --card: #fff;
-      --sidebar-bg: #2c3e50;
-      --sidebar-text: #ecf0f1;
-    }
-    [data-theme="dark"] {
-      --bg: #1e1e1e;
-      --text: #f0f0f0;
-      --card: #2b2b2b;
-      --sidebar-bg: #111;
-      --sidebar-text: #ddd;
-    }
     html, body, #root {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
     }
-    .app-container { display: flex; height: 100%; }
+    .app-container {
+      display: flex;
+      height: 100%;
+    }
     .sidebar {
       width: 220px;
-      background-color: var(--sidebar-bg);
-      color: var(--sidebar-text);
-      display: flex; flex-direction: column;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      display: flex;
+      flex-direction: column;
     }
-    .sidebar .logo { padding: 1rem; font-size: 1.3em; text-align: center; border-bottom: 1px solid #34495e; }
-    .sidebar nav { flex-grow: 1; }
+    .sidebar .logo {
+      padding: 1rem;
+      font-size: 1.3em;
+      text-align: center;
+      border-bottom: 1px solid #34495e;
+    }
+    .sidebar nav {
+      flex-grow: 1;
+    }
     .sidebar nav a {
-      display: flex; align-items: center;
-      gap: 0.5rem; padding: 0.75rem 1rem;
-      color: inherit; text-decoration: none;
+      display: block;
+      padding: 0.75rem 1rem;
+      color: inherit;
+      text-decoration: none;
     }
-    .sidebar nav a:hover, .sidebar nav a.active { background-color: #34495e; }
-    .main-content { flex-grow: 1; display: flex; flex-direction: column; }
-    .header { height: 60px; background-color: var(--card); border-bottom: 1px solid #ddd; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; }
-    .content-area { padding: 1rem; overflow-y: auto; background-color: var(--bg); flex-grow: 1; }
-    .page h2 { margin-top: 0; }
-    .form-box { background: var(--card); padding: 1rem; max-width: 500px; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .form-box label { display: block; margin-top: 0.75rem; }
-    .form-box input, .form-box select, .form-box textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; background: var(--bg); color: var(--text); border: 1px solid #ccc; }
-    .form-box button { margin-top: 1rem; padding: 0.75rem 1.5rem; background-color: #3498db; color: white; border: none; cursor: pointer; }
-    .form-box button:hover { background-color: #2980b9; }
-    .message { margin-top: 1rem; color: green; }
-    .error { margin-top: 1rem; color: red; }
-    .consultancy-list { background: var(--card); padding: 1rem; max-width: 600px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .consultancy-list ul { padding-left: 20px; }
-    .star-rating { display: flex; gap: 0.5rem; font-size: 1.5rem; cursor: pointer; }
-    .star { color: #ccc; }
-    .star.filled { color: gold; }
-    video { width: 100%; max-width: 500px; margin-top: 1rem; border: 1px solid #ccc; }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: #34495e;
+    }
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      height: 60px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+    }
+    .content-area {
+      padding: 1rem;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      flex-grow: 1;
+    }
+    .page h2 {
+      margin-top: 0;
+    }
+
+    /* Shared form styles */
+    .form-box {
+      background: white;
+      padding: 1rem;
+      max-width: 500px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .form-box label {
+      display: block;
+      margin-top: 0.75rem;
+    }
+    .form-box input,
+    .form-box select,
+    .form-box textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    .form-box button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-box button:hover {
+      background-color: #2980b9;
+    }
+    .message {
+      margin-top: 1rem;
+      color: green;
+    }
+
+    /* Consultancy records */
+    .consultancy-list {
+      background: white;
+      padding: 1rem;
+      max-width: 600px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .consultancy-list ul {
+      padding-left: 20px;
+    }
   </style>
 </head>
 <body>
   <div id="root"></div>
+
   <script type="text/javascript">
     const { BrowserRouter, Routes, Route, NavLink, Navigate } = ReactRouterDOM;
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect } = React;
 
-    /* Sidebar */
+    /* ---------------- Sidebar ---------------- */
     function Sidebar() {
       const paths = [
-        {path:'dashboard',icon:'fa-chart-line'},
-        {path:'booking',icon:'fa-calendar-check'},
-        {path:'consultation',icon:'fa-video'},
-        {path:'payments',icon:'fa-credit-card'},
-        {path:'settings',icon:'fa-gear'},
-        {path:'records',icon:'fa-folder'},
-        {path:'feedback',icon:'fa-comment-dots'}
+        'dashboard',
+        'booking',
+        'consultation',
+        'payments',
+        'settings',
+        'records',
+        'feedback'
       ];
       return (
-        React.createElement('div',{className:'sidebar'},
-          React.createElement('div',{className:'logo'},'TeleDoc Dash'),
-          React.createElement('nav',null,
-            paths.map(({path,icon})=>
-              React.createElement(NavLink,{
-                key:path,to:'/'+path,className:({isActive})=>isActive?'active':''
-              },React.createElement('i',{className:`fa ${icon}`}), path.charAt(0).toUpperCase()+path.slice(1))
+        React.createElement('div', { className: 'sidebar' },
+          React.createElement('div', { className: 'logo' }, 'TeleDoc Dash'),
+          React.createElement('nav', null,
+            paths.map(path =>
+              React.createElement(NavLink, {
+                key: path,
+                to: '/' + path,
+                className: ({ isActive }) => isActive ? 'active' : ''
+              }, path.charAt(0).toUpperCase() + path.slice(1))
             )
           )
         )
       );
     }
 
-    /* Header */
-    function Header({toggleTheme}) {
-      return React.createElement('div',{className:'header'},
-        React.createElement('h3',null,'Admin Dashboard — Teleconsultation Platform'),
-        React.createElement('button',{onClick:toggleTheme},'Toggle Theme')
+    function Header() {
+      return React.createElement('div', { className: 'header' },
+        React.createElement('h3', null, 'Admin Dashboard — Teleconsultation Platform')
       );
     }
 
-    /* Dashboard with charts */
-    function DashboardPage(){
-      const chartRef1 = useRef(null);
-      const chartRef2 = useRef(null);
-      useEffect(()=>{
-        new Chart(chartRef1.current,{
-          type:'pie',data:{labels:['Video','Audio','Chat'],datasets:[{data:[12,7,5],backgroundColor:['#3498db','#e67e22','#2ecc71']}]} });
-        new Chart(chartRef2.current,{
-          type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri'],datasets:[{label:'Bookings',data:[5,8,6,7,9]}]},options:{scales:{y:{beginAtZero:true}}} });
-      },[]);
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Dashboard Overview'),
-        React.createElement('p',null,'Summary of consultations and bookings this week.'),
-        React.createElement('canvas',{ref:chartRef1,height:200}),
-        React.createElement('canvas',{ref:chartRef2,height:200})
+    /* ---------------- Dashboard ---------------- */
+    function DashboardPage() {
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Dashboard Overview'),
+        React.createElement('p', null, 'Welcome! Use sidebar to manage bookings, consultations, payments, consultancy records, feedback, and system settings.')
       );
     }
 
-    /* Booking (persistent) */
-    function BookingPage(){
-      const [name,setName]=useState('');
-      const [date,setDate]=useState('');
-      const [slot,setSlot]=useState('');
-      const [consultType,setConsultType]=useState('video');
-      const [booked,setBooked]=useState(false);
-      const handleBook=(ev)=>{
+    /* ---------------- Booking ---------------- */
+    function BookingPage() {
+      const [name, setName] = useState('');
+      const [date, setDate] = useState('');
+      const [slot, setSlot] = useState('');
+      const [consultType, setConsultType] = useState('video');
+      const [booked, setBooked] = useState(false);
+
+      const handleBook = (ev) => {
         ev.preventDefault();
-        const newBooking={name,date,slot,consultType};
-        localStorage.setItem('booking',JSON.stringify(newBooking));
         setBooked(true);
       };
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Book Appointment'),
-        React.createElement('form',{className:'form-box',onSubmit:handleBook},
-          React.createElement('label',null,'Patient Name:'),
-          React.createElement('input',{type:'text',value:name,onChange:e=>setName(e.target.value),required:true}),
-          React.createElement('label',null,'Date:'),
-          React.createElement('input',{type:'date',value:date,onChange:e=>setDate(e.target.value),required:true}),
-          React.createElement('label',null,'Slot:'),
-          React.createElement('select',{value:slot,onChange:e=>setSlot(e.target.value),required:true},
-            React.createElement('option',{value:''},'--Select Slot--'),
-            React.createElement('option',{value:'09:00-10:00'},'09:00 — 10:00'),
-            React.createElement('option',{value:'10:00-11:00'},'10:00 — 11:00'),
-            React.createElement('option',{value:'11:00-12:00'},'11:00 — 12:00')
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Book Appointment'),
+        React.createElement('form', { className: 'form-box', onSubmit: handleBook },
+          React.createElement('label', null, 'Patient Name:'),
+          React.createElement('input', { type: 'text', value: name, onChange: (e)=>setName(e.target.value), required: true }),
+          React.createElement('label', null, 'Date:'),
+          React.createElement('input', { type: 'date', value: date, onChange: (e)=>setDate(e.target.value), required: true }),
+          React.createElement('label', null, 'Slot:'),
+          React.createElement('select', { value: slot, onChange: (e)=>setSlot(e.target.value), required: true },
+            React.createElement('option', { value: '' }, '--Select Slot--'),
+            React.createElement('option', { value: '09:00-10:00' }, '09:00 — 10:00'),
+            React.createElement('option', { value: '10:00-11:00' }, '10:00 — 11:00'),
+            React.createElement('option', { value: '11:00-12:00' }, '11:00 — 12:00')
           ),
-          React.createElement('label',null,'Consultation Type:'),
-          React.createElement('select',{value:consultType,onChange:e=>setConsultType(e.target.value)},
-            React.createElement('option',{value:'video'},'Video Call'),
-            React.createElement('option',{value:'audio'},'Audio Call'),
-            React.createElement('option',{value:'chat'},'Chat Consultation')
+          React.createElement('label', null, 'Consultation Type:'),
+          React.createElement('select', { value: consultType, onChange: (e)=>setConsultType(e.target.value) },
+            React.createElement('option', { value: 'video' }, 'Video Call'),
+            React.createElement('option', { value: 'audio' }, 'Audio Call'),
+            React.createElement('option', { value: 'chat' }, 'Chat Consultation')
           ),
-          React.createElement('button',{type:'submit'},'Book Appointment'),
-          booked && React.createElement('div',{className:'message'},'Appointment booked! Awaiting payment.')
+          React.createElement('button', { type: 'submit' }, 'Book Appointment'),
+          booked && React.createElement('div', { className: 'message' }, 'Appointment booked! Awaiting payment.')
         )
       );
     }
 
-    /* Consultation with webcam + timer */
-    function ConsultationPage(){
-      const [isActive,setIsActive]=useState(false);
-      const [type,setType]=useState('video');
-      const [recording,setRecording]=useState(false);
-      const [time,setTime]=useState(0);
-      const videoRef=useRef(null);
-      useEffect(()=>{ let timer; if(isActive){ timer=setInterval(()=>setTime(t=>t+1),1000);} return ()=>clearInterval(timer); },[isActive]);
-      const startSession=()=>{
+    /* ---------------- Consultation ---------------- */
+    function ConsultationPage() {
+      const [isActive, setIsActive] = useState(false);
+      const [type, setType] = useState('video');
+
+      useEffect(() => {
         setIsActive(true);
-        if(type==='video' && navigator.mediaDevices){
-          navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(stream=>{videoRef.current.srcObject=stream;});
+        setType('video');
+      }, []);
+
+      const startSession = () => {
+        if (!isActive) {
+          alert('No active consultation.');
+          return;
         }
+        alert(`Starting ${type} consultation session...`);
       };
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Consultation'),
-        !isActive ?
-          React.createElement('button',{onClick:startSession},`Start ${type.toUpperCase()} Session`)
-        : React.createElement('div',{className:'form-box'},
-            React.createElement('p',null,`Session active (${time}s)`),
-            type==='video' && React.createElement('video',{ref:videoRef,autoPlay:true}),
-            React.createElement('button',{onClick:()=>setIsActive(false)},'End Session')
-          )
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Consultation'),
+        isActive
+          ? React.createElement('div', { className: 'form-box' },
+              React.createElement('p', null, `Type: ${type.toUpperCase()}`),
+              React.createElement('button', { onClick: startSession }, `Start ${type.toUpperCase()} Session`)
+            )
+          : React.createElement('p', null, 'No active consultations currently.')
       );
     }
 
-    /* Payments with validation */
-    function PaymentsPage(){
-      const [method,setMethod]=useState('card');
-      const [cardName,setCardName]=useState('');
-      const [cardNumber,setCardNumber]=useState('');
-      const [upiId,setUpiId]=useState('');
-      const [paid,setPaid]=useState(false);
-      const [error,setError]=useState('');
-      const handlePay=(ev)=>{
+    /* ---------------- Payments ---------------- */
+    function PaymentsPage() {
+      const [cardName, setCardName] = useState('');
+      const [cardNumber, setCardNumber] = useState('');
+      const [paid, setPaid] = useState(false);
+
+      const handlePay = (ev) => {
         ev.preventDefault();
-        setError('');
-        if(method==='card' && cardNumber.length!==16){ setError('Card number must be 16 digits.'); return; }
-        if(method==='upi' && !/^\w+@\w+$/.test(upiId)){ setError('Invalid UPI ID format.'); return; }
         setPaid(true);
       };
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Payment'),
-        React.createElement('form',{className:'form-box',onSubmit:handlePay},
-          React.createElement('label',null,'Select Payment Method:'),
-          React.createElement('select',{value:method,onChange:e=>setMethod(e.target.value)},
-            React.createElement('option',{value:'card'},'Card'),
-            React.createElement('option',{value:'upi'},'UPI')
-          ),
-          method==='card' && React.createElement(React.Fragment,null,
-            React.createElement('label',null,'Cardholder Name:'),
-            React.createElement('input',{type:'text',value:cardName,onChange:e=>setCardName(e.target.value),required:true}),
-            React.createElement('label',null,'Card Number:'),
-            React.createElement('input',{type:'text',value:cardNumber,onChange:e=>setCardNumber(e.target.value),required:true,maxLength:16})
-          ),
-          method==='upi' && React.createElement(React.Fragment,null,
-            React.createElement('label',null,'UPI ID:'),
-            React.createElement('input',{type:'text',value:upiId,onChange:e=>setUpiId(e.target.value),required:true,placeholder:'example@upi'})
-          ),
-          React.createElement('button',{type:'submit'},paid?'Paid':'Pay Now'),
-          paid && React.createElement('div',{className:'message'},'Payment successful!'),
-          error && React.createElement('div',{className:'error'},error)
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Payment'),
+        React.createElement('form', { className: 'form-box', onSubmit: handlePay },
+          React.createElement('label', null, 'Cardholder Name:'),
+          React.createElement('input', { type: 'text', value: cardName, onChange: (e)=>setCardName(e.target.value), required: true }),
+          React.createElement('label', null, 'Card Number:'),
+          React.createElement('input', { type: 'text', value: cardNumber, onChange: (e)=>setCardNumber(e.target.value), required: true, maxLength: 16 }),
+          React.createElement('button', { type: 'submit' }, paid ? 'Paid' : 'Pay Now'),
+          paid && React.createElement('div', { className: 'message' }, 'Payment successful!')
         )
       );
     }
 
-    /* Settings persistent */
-    function SettingsPage({theme,setTheme}){
-      const [hospitalName,setHospitalName]=useState(localStorage.getItem('hospitalName')||'My Clinic');
-      const [timeZone,setTimeZone]=useState(localStorage.getItem('timeZone')||'Asia/Kolkata');
-      const [notificationEmail,setNotificationEmail]=useState(localStorage.getItem('notificationEmail')||'admin@clinic.com');
-      const [saved,setSaved]=useState(false);
-      const handleSave=(ev)=>{ev.preventDefault();
-        localStorage.setItem('hospitalName',hospitalName);
-        localStorage.setItem('timeZone',timeZone);
-        localStorage.setItem('notificationEmail',notificationEmail);
-        setSaved(true); setTimeout(()=>setSaved(false),2000);
+    /* ---------------- Settings ---------------- */
+    function SettingsPage() {
+      const [hospitalName, setHospitalName] = useState('');
+      const [timeZone, setTimeZone] = useState('');
+      const [notificationEmail, setNotificationEmail] = useState('');
+      const [saved, setSaved] = useState(false);
+
+      useEffect(() => {
+        setHospitalName('My Clinic');
+        setTimeZone('Asia/Kolkata');
+        setNotificationEmail('admin@clinic.com');
+      }, []);
+
+      const handleSave = (ev) => {
+        ev.preventDefault();
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
       };
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'System Settings'),
-        React.createElement('form',{className:'form-box',onSubmit:handleSave},
-          React.createElement('label',null,'Hospital / Clinic Name:'),
-          React.createElement('input',{type:'text',value:hospitalName,onChange:e=>setHospitalName(e.target.value),required:true}),
-          React.createElement('label',null,'Time Zone:'),
-          React.createElement('select',{value:timeZone,onChange:e=>setTimeZone(e.target.value),required:true},
-            React.createElement('option',{value:'Asia/Kolkata'},'India / Kolkata'),
-            React.createElement('option',{value:'UTC'},'UTC'),
-            React.createElement('option',{value:'America/New_York'},'New York / US Eastern')
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'System Settings'),
+        React.createElement('form', { className: 'form-box', onSubmit: handleSave },
+          React.createElement('label', null, 'Hospital / Clinic Name:'),
+          React.createElement('input', { type: 'text', value: hospitalName, onChange: (e)=>setHospitalName(e.target.value), required: true }),
+          React.createElement('label', null, 'Time Zone:'),
+          React.createElement('select', { value: timeZone, onChange: (e)=>setTimeZone(e.target.value), required: true },
+            React.createElement('option', { value: '' }, '--Select Time Zone--'),
+            React.createElement('option', { value: 'Asia/Kolkata' }, 'India / Kolkata'),
+            React.createElement('option', { value: 'UTC' }, 'UTC'),
+            React.createElement('option', { value: 'America/New_York' }, 'New York / US Eastern')
           ),
-          React.createElement('label',null,'Notification Email:'),
-          React.createElement('input',{type:'email',value:notificationEmail,onChange:e=>setNotificationEmail(e.target.value),required:true}),
-          React.createElement('label',null,'Theme:'),
-          React.createElement('select',{value:theme,onChange:e=>setTheme(e.target.value)},
-            React.createElement('option',{value:'light'},'Light'),
-            React.createElement('option',{value:'dark'},'Dark')
-          ),
-          React.createElement('button',{type:'submit'},'Save Settings'),
-          saved && React.createElement('div',{className:'message'},'Settings saved!')
+          React.createElement('label', null, 'Notification Email:'),
+          React.createElement('input', { type: 'email', value: notificationEmail, onChange: (e)=>setNotificationEmail(e.target.value), required: true }),
+          React.createElement('button', { type: 'submit' }, 'Save Settings'),
+          saved && React.createElement('div', { className: 'message' }, 'Settings saved!')
         )
       );
     }
 
-    /* Records */
-    function RecordsPage(){
-      const [filter,setFilter]=useState('');
-      const [records,setRecords]=useState([]);
-      useEffect(()=>{
-        const stored=[
-          {id:1,patient:"John Doe",type:"video",date:"2025-09-20"},
-          {id:2,patient:"Alice Smith",type:"audio",date:"2025-09-21"},
-          {id:3,patient:"Rahul Kumar",type:"chat",date:"2025-09-22"}
-        ];
-        setRecords(stored);
-      },[]);
-      const filtered=filter?records.filter(r=>r.type===filter):records;
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Consultancy Records'),
-        React.createElement('label',null,'Filter by type: '),
-        React.createElement('select',{value:filter,onChange:e=>setFilter(e.target.value)},
-          React.createElement('option',{value:''},'All'),
-          React.createElement('option',{value:'video'},'Video'),
-          React.createElement('option',{value:'audio'},'Audio'),
-          React.createElement('option',{value:'chat'},'Chat')
+    /* ---------------- Records ---------------- */
+    function RecordsPage() {
+      const [filter, setFilter] = useState('');
+      const [records, setRecords] = useState([]);
+
+      useEffect(() => {
+        setRecords([
+          { id: 1, patient: "John Doe", type: "video", date: "2025-09-20" },
+          { id: 2, patient: "Alice Smith", type: "audio", date: "2025-09-21" },
+          { id: 3, patient: "Rahul Kumar", type: "chat", date: "2025-09-22" }
+        ]);
+      }, []);
+
+      const filteredRecords = filter ? records.filter(r => r.type === filter) : records;
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Consultancy Records'),
+        React.createElement('label', null, 'Filter by type: '),
+        React.createElement('select', { value: filter, onChange: (e)=>setFilter(e.target.value) },
+          React.createElement('option', { value: '' }, 'All'),
+          React.createElement('option', { value: 'video' }, 'Video'),
+          React.createElement('option', { value: 'audio' }, 'Audio'),
+          React.createElement('option', { value: 'chat' }, 'Chat')
         ),
-        React.createElement('div',{className:'consultancy-list'},
-          React.createElement('ul',null,
-            filtered.map(r=>React.createElement('li',{key:r.id},"" + r.date + " - " + r.patient + " (" + r.type.toUpperCase() + ")", r.recordUrl ? React.createElement('span', { style: { marginLeft: '8px' } }, React.createElement('a', { href: r.recordUrl, download: (r.patient.split(' ').join('_') + '_' + r.id + '.webm') }, '[Download]')) : null))
-          )
-        )
-      );
-    }
-
-    /* Feedback */
-    function FeedbackPage(){
-      const [name,setName]=useState('');
-      const [rating,setRating]=useState(0);
-      const [comments,setComments]=useState('');
-      const [submitted,setSubmitted]=useState(false);
-      const handleSubmit=(ev)=>{ev.preventDefault();
-        const all = JSON.parse(localStorage.getItem('feedbacks')||'[]');
-        const newf = { id: Date.now(), name, rating, comments, date: new Date().toISOString().slice(0,10) };
-        all.push(newf);
-        localStorage.setItem('feedbacks', JSON.stringify(all));
-        setSubmitted(true);
-      };
-      return React.createElement('div',{className:'page'},
-        React.createElement('h2',null,'Patient Feedback'),
-        React.createElement('form',{className:'form-box',onSubmit:handleSubmit},
-          React.createElement('label',null,'Patient Name:'),
-          React.createElement('input',{type:'text',value:name,onChange:e=>setName(e.target.value),required:true}),
-          React.createElement('label',null,'Rating:'),
-          React.createElement('div',{className:'star-rating'},
-            [1,2,3,4,5].map(i=>React.createElement('span',{key:i,className:'star '+(i<=rating?'filled':''),onClick:()=>setRating(i)},'★'))
-          ),
-          React.createElement('label',null,'Comments:'),
-          React.createElement('textarea',{value:comments,onChange:e=>setComments(e.target.value),required:true,rows:4}),
-          React.createElement('button',{type:'submit'},'Submit Feedback'),
-          submitted && React.createElement('div',{className:'message'},'Feedback submitted. Thank you!')
-        )
-      );
-    }
-
-    /* App */
-    function App(){
-      const [theme,setTheme]=useState(localStorage.getItem('theme')||'light');
-      useEffect(()=>{ document.documentElement.setAttribute('data-theme',theme); localStorage.setItem('theme',theme); },[theme]);
-
-      // ensure records from storage are used by Dashboard charts
-      useEffect(()=>{
-        // seed mock records if none
-        if(!localStorage.getItem('records')){
-          const seed=[
-            {id:1,patient:"John Doe",type:"video",date:"2025-09-20"},
-            {id:2,patient:"Alice Smith",type:"audio",date:"2025-09-21"},
-            {id:3,patient:"Rahul Kumar",type:"chat",date:"2025-09-22"}
-          ];
-          localStorage.setItem('records',JSON.stringify(seed));
-        }
-      },[]);
-
-      const toggleTheme=()=>setTheme(prev=>prev==='light'?'dark':'light');
-      return React.createElement(BrowserRouter,null,
-        React.createElement('div',{className:'app-container'},
-          React.createElement(Sidebar),
-          React.createElement('div',{className:'main-content'},
-            React.createElement(Header,{toggleTheme}),
-            React.createElement('div',{className:'content-area'},
-              React.createElement(Routes,null,
-                React.createElement(Route,{path:'/',element:React.createElement(Navigate,{to:'/dashboard'})}),
-                React.createElement(Route,{path:'/dashboard',element:React.createElement(DashboardPage)}),
-                React.createElement(Route,{path:'/booking',element:React.createElement(BookingPage)}),
-                React.createElement(Route,{path:'/consultation',element:React.createElement(ConsultationPage)}),
-                React.createElement(Route,{path:'/payments',element:React.createElement(PaymentsPage)}),
-                React.createElement(Route,{path:'/settings',element:React.createElement(SettingsPage,{theme,setTheme})}),
-                React.createElement(Route,{path:'/records',element:React.createElement(RecordsPage)}),
-                React.createElement(Route,{path:'/feedback',element:React.createElement(FeedbackPage)})
+        React.createElement('div', { className: 'consultancy-list' },
+          React.createElement('ul', null,
+            filteredRecords.map(r =>
+              React.createElement('li', { key: r.id },
+                `${r.date} - ${r.patient} (${r.type.toUpperCase()})`
               )
             )
           )
@@ -369,7 +332,61 @@
       );
     }
 
-    const root=ReactDOM.createRoot(document.getElementById('root'));
+    /* ---------------- Feedback ---------------- */
+    function FeedbackPage() {
+      const [name, setName] = useState('');
+      const [rating, setRating] = useState('');
+      const [comments, setComments] = useState('');
+      const [submitted, setSubmitted] = useState(false);
+
+      const handleSubmit = (ev) => {
+        ev.preventDefault();
+        setSubmitted(true);
+      };
+
+      return React.createElement('div', { className: 'page' },
+        React.createElement('h2', null, 'Patient Feedback'),
+        React.createElement('form', { className: 'form-box', onSubmit: handleSubmit },
+          React.createElement('label', null, 'Patient Name:'),
+          React.createElement('input', { type: 'text', value: name, onChange: (e)=>setName(e.target.value), required: true }),
+          React.createElement('label', null, 'Rating (1-5):'),
+          React.createElement('select', { value: rating, onChange: (e)=>setRating(e.target.value), required: true },
+            React.createElement('option', { value: '' }, '--Select--'),
+            [1,2,3,4,5].map(num => React.createElement('option', { key: num, value: num }, num))
+          ),
+          React.createElement('label', null, 'Comments:'),
+          React.createElement('textarea', { value: comments, onChange: (e)=>setComments(e.target.value), required: true, rows: 4 }),
+          React.createElement('button', { type: 'submit' }, 'Submit Feedback'),
+          submitted && React.createElement('div', { className: 'message' }, 'Feedback submitted. Thank you!')
+        )
+      );
+    }
+
+    /* ---------------- App ---------------- */
+    function App() {
+      return React.createElement(BrowserRouter, null,
+        React.createElement('div', { className: 'app-container' },
+          React.createElement(Sidebar),
+          React.createElement('div', { className: 'main-content' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'content-area' },
+              React.createElement(Routes, null,
+                React.createElement(Route, { path: "/", element: React.createElement(Navigate, { to: "/dashboard" }) }),
+                React.createElement(Route, { path: "/dashboard", element: React.createElement(DashboardPage) }),
+                React.createElement(Route, { path: "/booking", element: React.createElement(BookingPage) }),
+                React.createElement(Route, { path: "/consultation", element: React.createElement(ConsultationPage) }),
+                React.createElement(Route, { path: "/payments", element: React.createElement(PaymentsPage) }),
+                React.createElement(Route, { path: "/settings", element: React.createElement(SettingsPage) }),
+                React.createElement(Route, { path: "/records", element: React.createElement(RecordsPage) }),
+                React.createElement(Route, { path: "/feedback", element: React.createElement(FeedbackPage) })
+              )
+            )
+          )
+        )
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(React.createElement(App));
   </script>
 </body>
